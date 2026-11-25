@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2>Dashboard</h2>
+<p>Welcome, {{ user.username }}.</p>
+<h3>Total spending this month ({{ month|date:'F Y' }})</h3>
+<p><strong>{{ total|floatformat:2 }}</strong></p>
+
+<h3>Budget this month</h3>
+{% if budget %}
+    <p>Budget: {{ budget.Amount|floatformat:2 }}</p>
+    {% if total > budget.Amount %}
+        <p class="over-budget"><strong>Budget exceeded by {{ exceeded_by|floatformat:2 }}.</strong></p>
+    {% else %}
+        <p class="under-budget"><strong>Within budget: {{ remaining|floatformat:2 }} remaining.</strong></p>
+    {% endif %}
+    <p><a href="{% url 'budget' %}">Change budget</a></p>
+{% else %}
+    <p>No budget set for this month. <a href="{% url 'budget' %}">Set a budget</a></p>
+{% endif %}
+
+<h3>Spending by category this month</h3>
+<table>
+    <thead><tr><th scope="col">Category</th><th scope="col">Total</th></tr></thead>
+    <tbody>
+        {% for category in category_totals %}
+            <tr><td>{{ category.Category }}</td><td>{{ category.total|floatformat:2 }}</td></tr>
+        {% empty %}
+            <tr><td colspan="2">No expenses this month.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Recent expenses</h3>
+{% include 'expense_table.html' with expenses=recent_expenses %}
+
+<h3>Monthly summary</h3>
+<table>
+    <thead><tr><th scope="col">Month</th><th scope="col">Expenses</th><th scope="col">Total</th></tr></thead>
+    <tbody>
+        {% for summary in monthly_summary %}
+            <tr>
+                <td>{{ summary.month|date:'F Y' }}</td>
+                <td>{{ summary.count }}</td>
+                <td>{{ summary.total|floatformat:2 }}</td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="3">No expenses yet.</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

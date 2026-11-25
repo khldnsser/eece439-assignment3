@@ -1,0 +1,23 @@
+<div class="table-container">
+    <table>
+        <thead>
+            <tr><th scope="col">Title</th><th scope="col">Amount</th><th scope="col">Category</th><th scope="col">Date</th><th scope="col">Actions</th></tr>
+        </thead>
+        <tbody>
+            {% for expense in expenses %}
+                <tr>
+                    <td>{{ expense.ExpenseTitle }}</td>
+                    <td>{{ expense.Amount|floatformat:2 }}</td>
+                    <td>{{ expense.Category }}</td>
+                    <td>{{ expense.Date|date:'Y-m-d' }}</td>
+                    <td>
+                        <a href="{% url 'update_expense' expense.ExpenseID %}">Edit</a>
+                        <a href="{% url 'delete_expense' expense.ExpenseID %}">Delete</a>
+                    </td>
+                </tr>
+            {% empty %}
+                <tr><td colspan="5">No expenses found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

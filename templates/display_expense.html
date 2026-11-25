@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Expense History{% endblock %}
+{% block content %}
+<h2>Expense history</h2>
+<form method="get">
+    {{ form.as_p }}
+    <button type="submit">Filter</button>
+    <a href="{% url 'display_expense' %}">Clear filters</a>
+</form>
+{% include 'expense_table.html' %}
+{% endblock %}

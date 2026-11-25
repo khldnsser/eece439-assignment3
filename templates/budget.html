@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block title %}Budget{% endblock %}
+{% block content %}
+<h2>Budget for {{ month|date:'F Y' }}</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save budget</button>
+    <a href="{% url 'index' %}">Cancel</a>
+</form>
+{% endblock %}

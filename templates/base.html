@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Expense Tracker{% endblock %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 960px; margin: 30px auto; padding: 0 16px; color: #222; }
+        nav { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid #ccc; }
+        nav form { margin: 0; }
+        a { color: #174e91; }
+        table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+        th, td { padding: 10px; border: 1px solid #ccc; text-align: left; }
+        th { background: #f3f3f3; }
+        input, select, button { font: inherit; padding: 6px; max-width: 100%; box-sizing: border-box; }
+        button { cursor: pointer; }
+        label { display: inline-block; min-width: 140px; }
+        .helptext { display: block; color: #555; margin-top: 5px; }
+        .errorlist { color: #a01515; }
+        .over-budget { color: #a01515; }
+        .under-budget { color: #1d6b28; }
+        .messages { padding: 12px 28px; background: #edf7ed; }
+        .table-container { overflow-x: auto; }
+    </style>
+</head>
+<body>
+    <h1>Expense Tracker</h1>
+    <nav aria-label="Main navigation">
+        {% if user.is_authenticated %}
+            <a href="{% url 'index' %}">Dashboard</a>
+            <a href="{% url 'add_expense' %}">Add expense</a>
+            <a href="{% url 'display_expense' %}">Expense history</a>
+            <a href="{% url 'budget' %}">Budget</a>
+            <a href="{% url 'profile' %}">Profile</a>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </nav>
+    {% if messages %}
+        <ul class="messages" role="status">
+            {% for message in messages %}<li>{{ message }}</li>{% endfor %}
+        </ul>
+    {% endif %}
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
